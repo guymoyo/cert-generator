@@ -100,10 +100,8 @@ public class DynamicClientRegistration {
 		return null;
 	}
 	
-	@GetMapping("/env")
-	@ApiOperation(value = "servers", notes = "eserver")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Return token"),
-			@ApiResponse(code = 400, message = "Bad request") })
+	@GetMapping("/envConfig")
+	@ApiOperation(value = "servers", notes = "server")
 	public String env() {
 		
 		return envCf.getServers().toString();
