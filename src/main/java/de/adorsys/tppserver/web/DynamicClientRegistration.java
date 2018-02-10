@@ -101,7 +101,7 @@ public class DynamicClientRegistration {
 	}
 	
 	@GetMapping("/env")
-	@ApiOperation(value = "exchange code to token", notes = "exchange code to token")
+	@ApiOperation(value = "servers", notes = "eserver")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Return token"),
 			@ApiResponse(code = 400, message = "Bad request") })
 	public String env() {

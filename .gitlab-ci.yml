@@ -1,12 +1,6 @@
 # ------------------------------------------------------------------
 # variables
 # ------------------------------------------------------------------
-image: maven:3.3.9-jdk-8
-cache:
-  paths:
-    - /root/.m2/repository/
-before_script:
-  - apt-get update -y && apt-get upgrade -y
   
 variables:
   GITLAB_REGISTRY: "gitlab-registry.adorsys.de"
@@ -27,13 +21,10 @@ stages:
 # ------------------------------------------------------------------
 
 build_java:
+  image: maven:lastest
   stage: "build:src"
   script:
-    - mvn install -B
-  artifacts:
-    name: "tppserver"
-    paths:
-      - ./target/tppserver.jar
+    - mvn clean install
 
 build_snapshot_image:
   stage: "build:image"
