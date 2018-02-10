@@ -12,12 +12,22 @@ variables:
 # ------------------------------------------------------------------
 
 stages:
+  - "build:src"    # build jar and provide as artifact
   - "build:image"  # dockerize jar and push to gitlab registry
   - "deploy"       # push to openshift registry (snapshot deployment) or release registry
 
 # ------------------------------------------------------------------
 # jobs
 # ------------------------------------------------------------------
+
+build_java:
+  stage: "build:src"
+  image: "adorsys/openjdk-build-base:8"
+  tags:
+    - aws_docker
+  script:
+    - mvn clean package
+
 
 build_snapshot_image:
   stage: "build:image"
