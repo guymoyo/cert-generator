@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.adorsys.tppserver.config.EnvConfig;
 import de.adorsys.tppserver.domain.Bank;
 import de.adorsys.tppserver.service.BankService;
 import io.swagger.annotations.ApiOperation;
@@ -30,6 +31,8 @@ public class DynamicClientRegistration {
 	
 	@Autowired
 	BankService bankService;
+	@Autowired
+	EnvConfig envCf;
 
 	@GetMapping("/clientRegistration")
 	@ApiOperation(value = "Return the registred Client registed", notes = "Dynamical register an XS2A client to IDP of a known ASPSP ")
@@ -95,6 +98,15 @@ public class DynamicClientRegistration {
 	public String code2Token(@RequestParam(value = "code") String code) {
 		
 		return null;
+	}
+	
+	@GetMapping("/env")
+	@ApiOperation(value = "exchange code to token", notes = "exchange code to token")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Return token"),
+			@ApiResponse(code = 400, message = "Bad request") })
+	public String env() {
+		
+		return envCf.getServers().toString();
 	}
 
 }
