@@ -21,6 +21,7 @@ stages:
 # ------------------------------------------------------------------
 
 build_java:
+  image: maven:3-jdk-7
   stage: "build:src"
   script:
     - mvn clean package
