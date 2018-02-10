@@ -20,11 +20,17 @@ stages:
 # jobs
 # ------------------------------------------------------------------
 
+cache:
+  paths:
+    - .m2/repository/
+    - target/
+
+
 build_java:
   image: maven:latest
   stage: "build:src"
   script:
-    - mvn install -B
+    - mvn clean install
 
 build_snapshot_image:
   stage: "build:image"
