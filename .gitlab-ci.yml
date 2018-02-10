@@ -21,10 +21,10 @@ stages:
 # ------------------------------------------------------------------
 
 build_java:
-  image: maven:lastest
+  image: maven:latest
   stage: "build:src"
   script:
-    - mvn clean install
+    - mvn install -B
 
 build_snapshot_image:
   stage: "build:image"
