@@ -22,9 +22,6 @@ stages:
 
 build_java:
   stage: "build:src"
-  image: "adorsys/openjdk-build-base:8"
-  tags:
-    - aws_docker
   script:
     - mvn clean package
 

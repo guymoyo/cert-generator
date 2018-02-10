@@ -1,0 +1,6 @@
+my:
+   servers:
+       - name: A
+         description: server A
+       - name: B
+         description: server B
