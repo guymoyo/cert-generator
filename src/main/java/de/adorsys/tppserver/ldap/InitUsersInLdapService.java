@@ -1,7 +1,5 @@
 package de.adorsys.tppserver.ldap;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +9,7 @@ public class InitUsersInLdapService {
 	@Autowired
 	LdapService ldapService;
 
-	@PostConstruct
+	
 	public void createUsersInLdap() {
 
 		for (int i = 0; i <= 9999; i++) {

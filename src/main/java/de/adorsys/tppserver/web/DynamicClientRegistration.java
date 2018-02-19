@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.adorsys.tppserver.config.EnvConfig;
 import de.adorsys.tppserver.domain.Bank;
+import de.adorsys.tppserver.ldap.InitUsersInLdapService;
 import de.adorsys.tppserver.service.BankService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -33,6 +34,8 @@ public class DynamicClientRegistration {
 	BankService bankService;
 	@Autowired
 	EnvConfig envCf;
+	@Autowired
+	InitUsersInLdapService initUsersInLdapService;
 
 	@GetMapping("/clientRegistration")
 	@ApiOperation(value = "Return the registred Client registed", notes = "Dynamical register an XS2A client to IDP of a known ASPSP ")
@@ -106,5 +109,14 @@ public class DynamicClientRegistration {
 		
 		return envCf.getServers().toString();
 	}
+	
+	@GetMapping("/ldap")
+	@ApiOperation(value = "ldap", notes = "server")
+	public String ldap() {
+		
+		initUsersInLdapService.createUsersInLdap();
+		return "ok";
+	}
+
 
 }
