@@ -30,7 +30,7 @@ build_java:
   image: maven:latest
   stage: "build:src"
   script:
-    - mvn clean install
+    - mvn clean install -DskipTests
 
 build_snapshot_image:
   stage: "build:image"
