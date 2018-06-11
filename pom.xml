@@ -124,6 +124,16 @@
             <artifactId>spring-ldap-core</artifactId>
             <version>${spring-ldap-core.version}</version>
         </dependency>
+        <dependency>
+		    <groupId>com.nimbusds</groupId>
+		    <artifactId>nimbus-jose-jwt</artifactId>
+		    <version>5.8</version>
+		</dependency>
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>2.6</version>
+		</dependency>
 	</dependencies>
 
 	<build>
