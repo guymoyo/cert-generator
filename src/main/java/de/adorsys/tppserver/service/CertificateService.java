@@ -13,13 +13,12 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Integer;
-import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
-import org.bouncycastle.asn1.ASN1Primitive;
 import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
@@ -29,7 +28,6 @@ import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import com.cergenerator.service.helper.CertificateGenerator;
 import com.cergenerator.service.helper.CertificateUtils;
@@ -40,6 +38,8 @@ import de.adorsys.tppserver.domain.SubjectData;
 
 @Service
 public class CertificateService {
+	
+	private final static Logger LOGGER = Logger.getLogger(CertificateService.class.getName());
 
 //	private static final String BC = BouncyCastleProvider.PROVIDER_NAME;
 	
@@ -158,7 +158,7 @@ public class CertificateService {
 		IssuerData issuerData = new IssuerData();
 		
 		X509Certificate cert = CertificateUtils.getCertificate("MyRootCA.pem");
-		System.out.println(cert);
+		LOGGER.log(Level.INFO, cert.toString());
 		
 		X500Name issuerName;
 		try {
