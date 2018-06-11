@@ -57,7 +57,7 @@ public class CertificateUtils {
 	public static String getCertificateByName(String filename) {
 
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		URL url = loader.getResource("classpath*:certificates/" + filename);
+		URL url = loader.getResource("BOOT-INF/classes/certificates/" + filename);
 		String path = url.getPath();
 		File file = new File(path);
 
@@ -80,7 +80,7 @@ public class CertificateUtils {
 	public static X509Certificate getCertificate(String filename) {
 
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		URL url = loader.getResource("classpath*:certificates/" + filename);
+		URL url = loader.getResource("BOOT-INF/classes/certificates/" + filename);
 		String path = url.getPath();
 		File file = new File(path);
 
@@ -102,7 +102,7 @@ public class CertificateUtils {
 	public static PrivateKey getKeyFromFile(String keyPath) {
 		
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		InputStream stream = loader.getResourceAsStream("classpath*:certificates/" + keyPath);
+		InputStream stream = loader.getResourceAsStream("BOOT-INF/classes/certificates/" + keyPath);
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(stream));
 		
