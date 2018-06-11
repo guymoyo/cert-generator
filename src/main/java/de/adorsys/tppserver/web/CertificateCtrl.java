@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -62,7 +63,11 @@ public class CertificateCtrl {
 	    pemWriter.writeObject(cert);
 	    pemWriter.flush();
 	    pemWriter.close();
-	    return new ResponseEntity<String>(writer.toString(), HttpStatus.CREATED);
+	    String response = writer.toString();
+	    
+	    response = response.replaceAll("\n", "").replaceAll("\r", "");
+	    
+		return new ResponseEntity<String>(response, HttpStatus.CREATED);
 		
 	}
 	
