@@ -158,6 +158,7 @@ public class CertificateService {
 		IssuerData issuerData = new IssuerData();
 		
 		X509Certificate cert = CertificateUtils.getCertificate("MyRootCA.pem");
+		
 		LOGGER.log(Level.INFO, cert.toString());
 		
 		X500Name issuerName;
