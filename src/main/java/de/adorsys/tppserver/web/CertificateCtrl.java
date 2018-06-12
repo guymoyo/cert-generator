@@ -3,14 +3,12 @@ package de.adorsys.tppserver.web;
 
 import java.io.StringWriter;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,19 +31,7 @@ public class CertificateCtrl {
 		// TODO Auto-generated constructor stub
 	}
 	
-	@RequestMapping(method = RequestMethod.GET)
-	public ArrayList<CertificateData> getAll(){
-		// TODO: Implement
-		return null;
-	}
 	
-	@RequestMapping(value = "/{id}", 
-			method = RequestMethod.GET,
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<CertificateData> getById(int id){
-		// TODO: Implement
-		return null;
-	}
 	
 	@ApiOperation(value = "Return certificate base 64 encoded", notes = "Create a new certificate ")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Return new certificate"),
@@ -71,7 +57,7 @@ public class CertificateCtrl {
 		
 	}
 	
-	@RequestMapping(value = "/{id}/revoke",
+	/*@RequestMapping(value = "/{id}/revoke",
 			method = RequestMethod.POST)
 	public ResponseEntity<CertificateData> revoke(int id){
 		// TODO: Implement
@@ -84,4 +70,18 @@ public class CertificateCtrl {
 		// TODO: Implement
 		return null;
 	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public ArrayList<CertificateData> getAll(){
+		// TODO: Implement
+		return null;
+	}
+	
+	@RequestMapping(value = "/{id}", 
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<CertificateData> getById(int id){
+		// TODO: Implement
+		return null;
+	}*/
 }

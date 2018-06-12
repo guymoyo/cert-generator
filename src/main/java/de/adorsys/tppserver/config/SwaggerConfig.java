@@ -25,7 +25,7 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(new ApiInfo("TPP Server REST Api", "", "1.0", "urn:tos",
+                .apiInfo(new ApiInfo("Certificate Generator", "", "1.0", "urn:tos",
                         new Contact("gmo, adorsys GmbH & Co. KG", null, "gmo@adorsys.de"), null, null))
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("de.adorsys.tppserver.web"))

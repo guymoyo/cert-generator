@@ -1,4 +1,4 @@
-package de.adorsys.tppserver.web;
+/*package de.adorsys.tppserver.web;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,9 +23,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-/**
+*//**
  * @author gmo
- */
+ *//*
 @RestController
 @RequestMapping(produces = { "application/json; charset=UTF-8" })
 public class DynamicClientRegistration {
@@ -120,3 +120,4 @@ public class DynamicClientRegistration {
 
 
 }
+*/
