@@ -34,6 +34,6 @@ public class SignatureData {
 	private String psuID;
 	@ApiModelProperty(value = "date request", required = true, example = "date")
     @NotNull
-	private String date;
+	private String timestamp;
 	
 }

@@ -81,7 +81,7 @@ public class CertificateCtrl {
 	public ResponseEntity<String> generateSignature(@RequestBody SignatureData signatureData) throws Exception{
 		
 		String signatureStr = null;
-	    String headers = "Digest TPP-Transaction-ID TPP-Request-ID Date";
+	    String headers = "Digest TPP-Transaction-ID TPP-Request-ID Timestamp";
 	    
 	    PrivateKey privateKey = CertificateUtils.convertStr2PrivateKey(signatureData.getPrivateKey());
 
@@ -91,7 +91,7 @@ public class CertificateCtrl {
 		headersMap.put("Digest", signatureData.getDigest());
 		headersMap.put("TPP-Transaction-ID", signatureData.getTppTransactionID());
 		headersMap.put("TPP-Request-ID", signatureData.getTppRequestID());
-		headersMap.put("Date", signatureData.getDate());
+		headersMap.put("Timestamp", signatureData.getTimestamp());
 		
 		if(!StringUtils.isEmpty(signatureData.getPsuID())){
 			
