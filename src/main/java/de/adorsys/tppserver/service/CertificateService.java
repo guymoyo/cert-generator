@@ -1,6 +1,7 @@
 package de.adorsys.tppserver.service;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -27,12 +28,14 @@ import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import org.springframework.stereotype.Service;
 
 import com.cergenerator.service.helper.CertificateGenerator;
 import com.cergenerator.service.helper.CertificateUtils;
 
 import de.adorsys.tppserver.domain.CertificateData;
+import de.adorsys.tppserver.domain.CertificateResponse;
 import de.adorsys.tppserver.domain.IssuerData;
 import de.adorsys.tppserver.domain.SubjectData;
 
@@ -47,7 +50,7 @@ public class CertificateService {
 		Security.addProvider(new BouncyCastleProvider());
 	}
 	
-	public X509Certificate newCertificate (CertificateData cerData){
+	public CertificateResponse newCertificate (CertificateData cerData){
 		
 			SubjectData subjectData = generateSubjectData(cerData);
 			
@@ -65,6 +68,15 @@ public class CertificateService {
 				e.printStackTrace();
 			}
 			
+			CertificateResponse certificateResponse = new CertificateResponse();
+			certificateResponse.setPrivateKey(convertObjectToString(subjectData.getPrivateKey()));
+		    
+		    certificateResponse.setEncodedCert(convertObjectToString(cert));
+		    
+		    certificateResponse.setKeyId(cert.getSerialNumber().toString());
+		    
+		    certificateResponse.setAlgorithm(cert.getSigAlgName());
+			
 			System.out.println("\n===== issuer name =====");
 			System.out.println(cert.getIssuerX500Principal().getName());
 			System.out.println("\n===== Subject Name =====");
@@ -74,7 +86,7 @@ public class CertificateService {
 			System.out.println(cert);
 			System.out.println("-------------------------------------------------------");
 		
-			return cert;
+			return certificateResponse;
 	}
 	
 	private GeneralNames generateSubjectAltNames(CertificateData cerData) throws IOException {
@@ -174,6 +186,23 @@ public class CertificateService {
 		issuerData.setPrivateKey(privateKey);
 		
 		return issuerData;
+	}
+	
+	private String convertObjectToString(Object obj) {
+		
+		final StringWriter writer = new StringWriter();
+	    final JcaPEMWriter pemWriter = new JcaPEMWriter(writer);
+	    try {
+			pemWriter.writeObject(obj);
+			pemWriter.flush();
+		    pemWriter.close();
+		    String response = writer.toString();
+		    return response.replaceAll("\n", "").replaceAll("\r", "");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return null;
 	}
 		
 }

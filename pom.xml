@@ -144,7 +144,12 @@
 		    <groupId>org.bouncycastle</groupId>
 		    <artifactId>bcpkix-jdk15on</artifactId>
 		    <version>1.59</version>
-		</dependency>			
+		</dependency>	
+		<dependency>
+			<groupId>org.tomitribe</groupId>
+			<artifactId>tomitribe-http-signatures</artifactId>
+			<version>1.0</version>
+		</dependency>		
 	</dependencies>
 
 	<build>
