@@ -13,6 +13,7 @@ import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,12 +21,15 @@ import java.util.logging.Logger;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERSequence;
+import org.bouncycastle.asn1.DERUTF8String;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
+import org.bouncycastle.asn1.x509.qualified.QCStatement;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
@@ -37,6 +41,12 @@ import com.cergenerator.service.helper.CertificateUtils;
 import de.adorsys.tppserver.domain.CertificateData;
 import de.adorsys.tppserver.domain.CertificateResponse;
 import de.adorsys.tppserver.domain.IssuerData;
+import de.adorsys.tppserver.domain.NCAId;
+import de.adorsys.tppserver.domain.NCAName;
+import de.adorsys.tppserver.domain.PSD2QCObjectIdentifiers;
+import de.adorsys.tppserver.domain.PSD2Utils;
+import de.adorsys.tppserver.domain.RoleOfPSP;
+import de.adorsys.tppserver.domain.RolesOfPSP;
 import de.adorsys.tppserver.domain.SubjectData;
 
 @Service
@@ -60,10 +70,10 @@ public class CertificateService {
 			
 			X509Certificate cert = null;
 			
-			GeneralNames subjectAltNames;
+			
 			try {
-				subjectAltNames = generateSubjectAltNames(cerData);
-				cert = cg.generateCertificate(subjectData, issuerData, subjectAltNames);
+				QCStatement qcStatement = qcStatement(cerData);
+				cert = cg.generateCertificate(subjectData, issuerData, qcStatement);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -89,43 +99,20 @@ public class CertificateService {
 			return certificateResponse;
 	}
 	
-	private GeneralNames generateSubjectAltNames(CertificateData cerData) throws IOException {
+	private QCStatement qcStatement(CertificateData cerData) throws IOException {
 		
-		ArrayList<GeneralName> namesList = new ArrayList<>();
+		List<RoleOfPSP> roles = new ArrayList<>();
 		
-		if(cerData.isAISP()) {
-			ASN1ObjectIdentifier oid = new ASN1ObjectIdentifier("1.2.3.1"); // some arbitrary non-existent OID number
-			DERSequence seq = new DERSequence(new ASN1Encodable[] { oid, new ASN1Integer(1) });
-			namesList.add(new GeneralName(GeneralName.otherName, seq));
-		}else {
-			ASN1ObjectIdentifier oid = new ASN1ObjectIdentifier("1.2.3.1"); // some arbitrary non-existent OID number
-			DERSequence seq = new DERSequence(new ASN1Encodable[] { oid, new ASN1Integer(0) });
-			namesList.add(new GeneralName(GeneralName.otherName, seq));
-		}
-		
-		if(cerData.isPISP()) {
-			ASN1ObjectIdentifier oid = new ASN1ObjectIdentifier("1.2.3.2"); // some arbitrary non-existent OID number
-			DERSequence seq = new DERSequence(new ASN1Encodable[] { oid, new ASN1Integer(1) });
-			namesList.add(new GeneralName(GeneralName.otherName, seq));
-		}else {
-			ASN1ObjectIdentifier oid = new ASN1ObjectIdentifier("1.2.3.2"); // some arbitrary non-existent OID number
-			DERSequence seq = new DERSequence(new ASN1Encodable[] { oid, new ASN1Integer(0) });
-			namesList.add(new GeneralName(GeneralName.otherName, seq));
-		}
-		
-		if(cerData.isPIISP()) {
-			ASN1ObjectIdentifier oid = new ASN1ObjectIdentifier("1.2.3.3"); // some arbitrary non-existent OID number
-			DERSequence seq = new DERSequence(new ASN1Encodable[] { oid, new ASN1Integer(1) });
-			namesList.add(new GeneralName(GeneralName.otherName, seq));
-		}else {
-			ASN1ObjectIdentifier oid = new ASN1ObjectIdentifier("1.2.3.3"); // some arbitrary non-existent OID number
-			DERSequence seq = new DERSequence(new ASN1Encodable[] { oid, new ASN1Integer(0) });
-			namesList.add(new GeneralName(GeneralName.otherName, seq));
-		}
-			
-		GeneralNames subjectAltNames = GeneralNames.getInstance(new DERSequence((GeneralName[]) namesList.toArray(new GeneralName[] {})));
+		if(cerData.isASPSP()) roles.add(RoleOfPSP.PSP_AS);
+		if(cerData.isPISP()) roles.add(RoleOfPSP.PSP_PI);
+		if(cerData.isAISP()) roles.add(RoleOfPSP.PSP_AI);
+		if(cerData.isPIISP()) roles.add(RoleOfPSP.PSP_IC);
 
-		return subjectAltNames;
+		RolesOfPSP rolesOfPSP = new RolesOfPSP(roles.toArray(new RoleOfPSP[roles.size()]));
+		NCAName nCAName = new NCAName(cerData.getPspAuthorityName());
+		NCAId nCAId = new NCAId(cerData.getPspAuthorityId());
+		ASN1Encodable qcStatementInfo = PSD2Utils.psd2QcType(rolesOfPSP, nCAName, nCAId);
+		return new QCStatement(PSD2QCObjectIdentifiers.id_etsi_psd2_qcStatement, qcStatementInfo);
 	}
 
 	private SubjectData generateSubjectData(CertificateData cerData) {
@@ -147,6 +134,8 @@ public class CertificateService {
 		builder.addRDN(BCStyle.C, cerData.getCountry());
 		builder.addRDN(BCStyle.ST, cerData.getState());
 		builder.addRDN(BCStyle.L, cerData.getCity());
+		
+		builder.addRDN(BCStyle.ORGANIZATION_IDENTIFIER, cerData.getPspAuthorzationNumber());
 		
 		return new SubjectData(keyPairSubject.getPrivate(), keyPairSubject.getPublic(), builder.build(), serialNumber, startDate, endDate);
 	}

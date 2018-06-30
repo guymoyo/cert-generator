@@ -53,17 +53,24 @@ public class CertificateData {
 	@ApiModelProperty(value = "pIISP", required = true, example = "true")
 	private boolean pIISP;
 	
-	@ApiModelProperty(value = "pspName", required = true, example = "TPP_test")
+	@ApiModelProperty(value = "aSPSP", required = true, example = "true")
+	private boolean aSPSP;
+
+	/*@ApiModelProperty(value = "pspName", required = true, example = "TPP_test")
     @NotNull
-	private String pspName;
+	private String pspName;*/
 	
 	@ApiModelProperty(value = "pspAuthorityName", required = true, example = "Auth")
     @NotNull
 	private String pspAuthorityName;
 	
-	@ApiModelProperty(value = "pspAuthorityCountry", required = true, example = "Germany")
+	/*@ApiModelProperty(value = "pspAuthorityCountry", required = true, example = "Germany")
     @NotNull
-	private String pspAuthorityCountry;
+	private String pspAuthorityCountry;*/
+	
+	@ApiModelProperty(value = "pspAuthorityId", required = true, example = "Germany")
+    @NotNull
+	private String pspAuthorityId;
 		
 	
 }
